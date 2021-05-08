@@ -95,6 +95,21 @@ final class NovelStudioLintTests: XCTestCase {
         XCTAssertEqual(result, expected)
     }
 
+    func testInsertSpace() {
+        XCTAssertEqual(NovelStudioLint._insertSpace(paragraph: "粉砕！玉砕！大喝采！"), "粉砕！　玉砕！　大喝采！　")
+        XCTAssertEqual(NovelStudioLint._insertSpace(paragraph: "粉砕？玉砕？大喝采？"), "粉砕？　玉砕？　大喝采？　")
+        XCTAssertEqual(NovelStudioLint._insertSpace(paragraph: "粉砕!玉砕!大喝采!"), "粉砕!　玉砕!　大喝采!　")
+        XCTAssertEqual(NovelStudioLint._insertSpace(paragraph: "粉砕?玉砕?大喝采?"), "粉砕?　玉砕?　大喝采?　")
+        XCTAssertEqual(NovelStudioLint._insertSpace(paragraph: "粉砕‼玉砕‼大喝采‼"), "粉砕‼　玉砕‼　大喝采‼　")
+        XCTAssertEqual(NovelStudioLint._insertSpace(paragraph: "粉砕⁉玉砕⁉大喝采⁉"), "粉砕⁉　玉砕⁉　大喝采⁉　")
+        XCTAssertEqual(NovelStudioLint._insertSpace(paragraph: "粉砕⁈玉砕⁈大喝采⁈"), "粉砕⁈　玉砕⁈　大喝采⁈　")
+        XCTAssertEqual(NovelStudioLint._insertSpace(paragraph: "粉砕⁇玉砕⁇大喝采⁇"), "粉砕⁇　玉砕⁇　大喝采⁇　")
+    }
+
+    func testDeleteUnnecessarySpace() {
+        XCTAssertEqual(NovelStudioLint._deleteUnnecessarySpace(paragraph: "粉砕　！玉砕　！　大喝采！　　"), "粉砕！玉砕！　大喝采！　")
+    }
+
     // MARK: - API Tests
 
     func testDeleteEndSpaces() {
@@ -110,6 +125,14 @@ final class NovelStudioLintTests: XCTestCase {
         let expected = "　古池や\n「蛙飛びこむ」\n　水の音"
 
         let result = NovelStudioLint.insertIndent(sentence: testcase)
+        XCTAssertEqual(result, expected)
+    }
+
+    func testInsertSpaceAfterReservedMarks() {
+        let testcase = "古池！や！\n「蛙飛びこむ！？」\n水？　の音！！　"
+        let expected = "古池！　や！\n「蛙飛びこむ！？」\n水？　の音！！"
+
+        let result = NovelStudioLint.insertSpaceAfterReservedMarks(sentence: testcase)
         XCTAssertEqual(result, expected)
     }
 

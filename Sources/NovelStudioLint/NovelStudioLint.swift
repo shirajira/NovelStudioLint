@@ -20,15 +20,17 @@ import Foundation
 
 public class NovelStudioLint {
 
+    // MARK: - Properties
+
     private static let fullWidthWhiteSpace = "　"  // Full-width white-space
     private static let lineFeed: String = "\n"  // Line-feed
 
-    // MARK: - APIs
+    // MARK: - Main APIs
 
     /**
      Delete spaces located the end of the sentence.
      - parameter sentence: Sentence
-     - returns: Sentence
+     - returns: Formatted sentence
      */
     public static func deleteEndSpaces(sentence: String) -> String {
         let preprocessed = _preprocess(sentence: sentence)
@@ -51,7 +53,7 @@ public class NovelStudioLint {
     }
 
     /**
-     Insert an indent into each paragraph.
+     Insert an indent into each paragraph in the sentence.
      - parameter sentence: Sentence
      - returns: Indented sentence
      */
@@ -70,6 +72,46 @@ public class NovelStudioLint {
                 formatted = _indent(paragraph: paragraph)
             }
             ret.append(formatted)
+        }
+        return _combine(paragraphs: ret)
+    }
+
+    /**
+     Insert a space after some reserved marks.
+     - parameter sentence: Sentence
+     - returns: Formatted sentence
+     */
+    public static func insertSpaceAfterReservedMarks(sentence: String) -> String {
+        let preprocessed = _preprocess(sentence: sentence)
+        let paragraphs = _separate(sentence: preprocessed)
+        var ret: [String] = []
+        for paragraph in paragraphs {
+            var formatted: String = ""
+
+            // 1) Insert a space anyway.
+            formatted = _insertSpace(paragraph: paragraph)
+
+            // 2) Delete unnecessary spaces around some reserved marks.
+            var sourceBuffer = formatted
+            while true {
+                formatted = _deleteUnnecessarySpace(paragraph: sourceBuffer)
+                if formatted == sourceBuffer {
+                    break
+                }
+                sourceBuffer = formatted
+            }
+
+            // 3) Delete unnecessary spaces located the end of the paragraph.
+            sourceBuffer = formatted
+            while true {
+                formatted = _deleteEndSpace(paragraph: sourceBuffer)
+                if formatted == sourceBuffer {
+                    break
+                }
+                sourceBuffer = formatted
+            }
+            ret.append(formatted)
+
         }
         return _combine(paragraphs: ret)
     }
@@ -98,7 +140,7 @@ public class NovelStudioLint {
     /**
      Separate a sentence into paragraphs.
      - parameter sentence: Sentence
-     - returns: Array of paragraph
+     - returns: Array of paragraphs
      */
     internal static func _separate(sentence: String) -> [String] {
         let paragraphs = sentence.components(separatedBy: lineFeed)
@@ -107,7 +149,7 @@ public class NovelStudioLint {
 
     /**
      Combine paragraphs into a sentence.
-     - parameter paragraphs: Array of paragraph
+     - parameter paragraphs: Array of paragraphs
      - returns: Sentence
      */
     internal static func _combine(paragraphs: [String]) -> String {
@@ -124,7 +166,7 @@ public class NovelStudioLint {
     /**
      Delete a space located the end of the paragraph.
      - parameter paragraph: Paragraph
-     - returns: Paragraph
+     - returns: Modified paragraph
      */
     internal static func _deleteEndSpace(paragraph: String) -> String {
         if paragraph.isEmpty {
@@ -177,10 +219,65 @@ public class NovelStudioLint {
     /**
      Indent the paragraph.
      - parameter paragraph: Paragraph
-     - returns: Indented paragraph
+     - returns: Modified paragraph
      */
     internal static func _indent(paragraph: String) -> String {
         return fullWidthWhiteSpace + paragraph
+    }
+
+    /**
+     Insert a space after some reserved marks.
+     - parameter paragraph: Paragraph
+     - returns: Modified paragraph
+     */
+    internal static func _insertSpace(paragraph: String) -> String {
+        let replacementRule = [
+            "！": "！　",
+            "？": "？　",
+            "!": "!　",
+            "?": "?　",
+            "‼": "‼　",
+            "⁉": "⁉　",
+            "⁈": "⁈　",
+            "⁇": "⁇　"
+        ]
+        let ret = replacementRule.reduce(paragraph) {
+            $0.replacingOccurrences(of: $1.key, with: $1.value)
+        }
+        return ret
+    }
+
+    /**
+     Delete an unnecessary space around some reserved marks.
+     - parameter paragraph: Paragraph
+     - returns: Modified paragraph
+     */
+    internal static func _deleteUnnecessarySpace(paragraph: String) -> String {
+        let replacementRule = [
+            "　！": "！",
+            "　？": "？",
+            "　!": "!",
+            "　?": "?",
+            "　‼": "‼",
+            "　⁉": "⁉",
+            "　⁈": "⁈",
+            "　⁇": "⁇",
+            "　」": "」",
+            "　』": "』",
+            "　）": "）",
+            "！　　": "！　",
+            "？　　": "？　",
+            "!　　": "!　",
+            "?　　": "?　",
+            "‼　　": "‼　",
+            "⁉　　": "⁉　",
+            "⁈　　": "⁈　",
+            "⁇　　": "⁇　"
+        ]
+        let ret = replacementRule.reduce(paragraph) {
+            $0.replacingOccurrences(of: $1.key, with: $1.value)
+        }
+        return ret
     }
 
 }
