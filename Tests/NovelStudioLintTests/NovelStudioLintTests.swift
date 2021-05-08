@@ -87,6 +87,13 @@ final class NovelStudioLintTests: XCTestCase {
         XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "――小説"), true)
     }
 
+    func testCheckIndented() {
+        XCTAssertEqual(NovelStudioLint._checkIndented(paragraph: ""), false)
+        XCTAssertEqual(NovelStudioLint._checkIndented(paragraph: "　"), true)
+        XCTAssertEqual(NovelStudioLint._checkIndented(paragraph: "小説"), false)
+        XCTAssertEqual(NovelStudioLint._checkIndented(paragraph: "　「小説」"), true)
+    }
+
     func testIndent() {
         let testcase = "小説"
         let expected = "　小説"
