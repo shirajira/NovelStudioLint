@@ -16,6 +16,104 @@
 // limitations under the License.
 //--------------------------------------------------------------------------//
 
-struct NovelStudioLint {
-    var text = "Hello, World!"
+import Foundation
+
+public class NovelStudioLint {
+
+    private static let fullWidthWhiteSpace = "　"  // Full-width white-space
+    private static let lineFeed: String = "\n"  // Line-feed
+
+    // MARK: - APIs
+
+    /**
+     Delete spaces located the end of the sentence.
+     - parameter sentence: Sentence
+     - returns: Sentence
+     */
+    public static func deleteEndSpaces(sentence: String) -> String {
+        let preprocessed = _preprocess(sentence: sentence)
+        let paragraphs = _separate(sentence: preprocessed)
+        var ret: [String] = []
+        for paragraph in paragraphs {
+            var formatted: String = ""
+
+            var sourceBuffer = paragraph
+            while true {
+                formatted = _deleteEndSpace(paragraph: sourceBuffer)
+                if formatted == sourceBuffer {
+                    break
+                }
+                sourceBuffer = formatted
+            }
+            ret.append(formatted)
+        }
+        return _combine(paragraphs: ret)
+    }
+
+    // MARK: - Utilities
+
+    /**
+     Preprocess: Replace half-width marks to full-width.
+     - parameter sentence: Sentence may contain half-width marks (white-spaces, brackets and parentheses)
+     - returns: Sentence may not contains half-width marks
+     */
+    internal static func _preprocess(sentence: String) -> String {
+        let replacementRule = [
+            " ": "　",  // White-space
+            "｢": "「",  // Opening bracket
+            "｣": "」",  // Closing bracket
+            "(": "（",  // Opening parenthesis
+            ")": "）"   // Closing parenthesis
+        ]
+        let ret = replacementRule.reduce(sentence) {
+            $0.replacingOccurrences(of: $1.key, with: $1.value)
+        }
+        return ret
+    }
+
+    /**
+     Separate a sentence into paragraphs.
+     - parameter sentence: Sentence
+     - returns: Array of paragraph
+     */
+    internal static func _separate(sentence: String) -> [String] {
+        let paragraphs = sentence.components(separatedBy: NovelStudioLint.lineFeed)
+        return paragraphs
+    }
+
+    /**
+     Combine paragraphs into a sentence.
+     - parameter paragraphs: Array of paragraph
+     - returns: Sentence
+     */
+    internal static func _combine(paragraphs: [String]) -> String {
+        var sentence: String = ""
+        for (index, paragraph) in paragraphs.enumerated() {
+            sentence += paragraph
+            if index != paragraphs.endIndex - 1 {
+                sentence += NovelStudioLint.lineFeed
+            }
+        }
+        return sentence
+    }
+
+    /**
+     Delete a space located the end of the paragraph.
+     - parameter paragraph: Paragraph
+     - returns: Paragraph
+     */
+    internal static func _deleteEndSpace(paragraph: String) -> String {
+        if paragraph.isEmpty {
+            return paragraph
+        }
+        var ret: String = ""
+        let lastCharacter = paragraph.suffix(1)
+        if lastCharacter == NovelStudioLint.fullWidthWhiteSpace {
+            ret = String(paragraph.prefix(paragraph.count - 1))
+        } else {
+            ret = paragraph
+        }
+        return ret
+    }
+
 }
