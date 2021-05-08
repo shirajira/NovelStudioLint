@@ -110,11 +110,19 @@ final class NovelStudioLintTests: XCTestCase {
         XCTAssertEqual(NovelStudioLint._deleteUnnecessarySpace(paragraph: "粉砕　！玉砕　！　大喝采！　　"), "粉砕！玉砕！　大喝采！　")
     }
 
-    func testDeleteSpaceBeforeBracket() {
+    func testDeleteSpaceBeforeOpeningBracket() {
         let testcase = "　「小説」"
         let expected = "「小説」"
 
-        let result = NovelStudioLint._deleteSpaceBeforeBracket(paragraph: testcase)
+        let result = NovelStudioLint._deleteSpaceBeforeOpeningBracket(paragraph: testcase)
+        XCTAssertEqual(result, expected)
+    }
+
+    func testDeletePunctuationBeforeClosingBracket() {
+        let testcase = "「小説。」"
+        let expected = "「小説」"
+
+        let result = NovelStudioLint._deletePunctuationBeforeClosingBracket(paragraph: testcase)
         XCTAssertEqual(result, expected)
     }
 
@@ -144,11 +152,19 @@ final class NovelStudioLintTests: XCTestCase {
         XCTAssertEqual(result, expected)
     }
 
-    func testDeleteIndentBeforeBracket() {
+    func testDeleteSpacesBeforeOpeningBracket() {
         let testcase = "　古池や\n　「蛙飛びこむ」\n　　「水の音」"
         let expected = "　古池や\n「蛙飛びこむ」\n「水の音」"
 
-        let result = NovelStudioLint.deleteIndentBeforeBracket(sentence: testcase)
+        let result = NovelStudioLint.deleteSpacesBeforeOpeningBracket(sentence: testcase)
+        XCTAssertEqual(result, expected)
+    }
+
+    func testDeletePunctuationsBeforeClosingBracket() {
+        let testcase = "「古池や、」\n「蛙飛びこむ。」\n「水の音。。」"
+        let expected = "「古池や」\n「蛙飛びこむ」\n「水の音」"
+
+        let result = NovelStudioLint.deletePunctuationsBeforeClosingBracket(sentence: testcase)
         XCTAssertEqual(result, expected)
     }
 

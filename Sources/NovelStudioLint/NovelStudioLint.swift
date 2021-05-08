@@ -117,11 +117,11 @@ public class NovelStudioLint {
     }
 
     /**
-     Delete spaces before a bracket.
+     Delete spaces before a opening bracket.
      - parameter sentence: Sentence
      - returns: Formatted sentence
      */
-    public static func deleteSpaceBeforeBracket(sentence: String) -> String {
+    public static func deleteSpacesBeforeOpeningBracket(sentence: String) -> String {
         let preprocessed = _preprocess(sentence: sentence)
         let paragraphs = _separate(sentence: preprocessed)
         var ret: [String] = []
@@ -130,7 +130,32 @@ public class NovelStudioLint {
 
             var sourceBuffer = paragraph
             while true {
-                formatted = _deleteSpaceBeforeBracket(paragraph: sourceBuffer)
+                formatted = _deleteSpaceBeforeOpeningBracket(paragraph: sourceBuffer)
+                if formatted == sourceBuffer {
+                    break
+                }
+                sourceBuffer = formatted
+            }
+            ret.append(formatted)
+        }
+        return _combine(paragraphs: ret)
+    }
+
+    /**
+     Delete punctuations before a closing bracket.
+     - parameter sentence: Sentence
+     - returns: Formatted sentence
+     */
+    public static func deletePunctuationsBeforeClosingBracket(sentence: String) -> String {
+        let preprocessed = _preprocess(sentence: sentence)
+        let paragraphs = _separate(sentence: preprocessed)
+        var ret: [String] = []
+        for paragraph in paragraphs {
+            var formatted: String = ""
+
+            var sourceBuffer = paragraph
+            while true {
+                formatted = _deletePunctuationBeforeClosingBracket(paragraph: sourceBuffer)
                 if formatted == sourceBuffer {
                     break
                 }
@@ -306,16 +331,36 @@ public class NovelStudioLint {
     }
 
     /**
-     Delete an space before a bracket.
+     Delete an space before an opening bracket.
      - parameter paragraph: Paragraph
      - returns: Modified paragraph
      */
-    internal static func _deleteSpaceBeforeBracket(paragraph: String) -> String {
+    internal static func _deleteSpaceBeforeOpeningBracket(paragraph: String) -> String {
         let replacementRule = [
             "　「": "「",
             "　『": "『",
             "　（": "（",
             "　―": "―",
+        ]
+        let ret = replacementRule.reduce(paragraph) {
+            $0.replacingOccurrences(of: $1.key, with: $1.value)
+        }
+        return ret
+    }
+
+    /**
+     Delete a punctuation before a closing bracket.
+     - parameter paragraph: Paragraph
+     - returns: Modified paragraph
+     */
+    internal static func _deletePunctuationBeforeClosingBracket(paragraph: String) -> String {
+        let replacementRule = [
+            "、」": "」",
+            "。」": "」",
+            "、』": "』",
+            "。』": "』",
+            "、）": "）",
+            "。）": "）"
         ]
         let ret = replacementRule.reduce(paragraph) {
             $0.replacingOccurrences(of: $1.key, with: $1.value)
