@@ -19,3 +19,10 @@ profile
 
 #CocoaPod
 Pods/*
+
+# Package
+/.build
+/Packages
+/*.xcodeproj
+DerivedData/
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
