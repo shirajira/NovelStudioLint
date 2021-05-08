@@ -27,7 +27,13 @@ pod 'NovelStudioLint'
 
 `LICENSE` ファイルをご参照ください。
 
-## **Reference**
+## **API References**
+
+各 API では，一部の半角記号は全角に置き換えられます。
+
+- スペース
+- カギ括弧
+- 丸括弧
 
 ### **各段落の文末の不必要なスペースを削除**
 
