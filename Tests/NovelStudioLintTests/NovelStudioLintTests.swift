@@ -45,7 +45,7 @@ final class NovelStudioLintTests: XCTestCase {
         XCTAssertEqual(combined, sentence)
     }
 
-    func testDeleteEndSpaceForEmptyParagraph() {
+    func testDeleteEndSpaceForEmpty() {
         let testcase = ""
         let expected = ""
 
@@ -77,13 +77,39 @@ final class NovelStudioLintTests: XCTestCase {
         XCTAssertEqual(result, expected)
     }
 
+    func testCheckDialogParagraph() {
+        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: ""), false)
+        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "　"), false)
+        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "小説"), false)
+        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "「小説」"), true)
+        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "『小説』"), true)
+        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "（小説）"), true)
+        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "――小説"), true)
+    }
+
+    func testIndent() {
+        let testcase = "小説"
+        let expected = "　小説"
+
+        let result = NovelStudioLint._indent(paragraph: testcase)
+        XCTAssertEqual(result, expected)
+    }
+
     // MARK: - API Tests
 
     func testDeleteEndSpaces() {
-        let testcase = "古池や　\n蛙飛びこむ　　\n水の音"
+        let testcase = "古池や　\n蛙飛びこむ　　\n水の音　　　"
         let expected = "古池や\n蛙飛びこむ\n水の音"
 
         let result = NovelStudioLint.deleteEndSpaces(sentence: testcase)
+        XCTAssertEqual(result, expected)
+    }
+
+    func testInsertIndent() {
+        let testcase = "古池や\n「蛙飛びこむ」\n　水の音"
+        let expected = "　古池や\n「蛙飛びこむ」\n　水の音"
+
+        let result = NovelStudioLint.insertIndent(sentence: testcase)
         XCTAssertEqual(result, expected)
     }
 

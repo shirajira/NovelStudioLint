@@ -50,6 +50,30 @@ public class NovelStudioLint {
         return _combine(paragraphs: ret)
     }
 
+    /**
+     Insert an indent into each paragraph.
+     - parameter sentence: Sentence
+     - returns: Indented sentence
+     */
+    public static func insertIndent(sentence: String) -> String {
+        let preprocessed = _preprocess(sentence: sentence)
+        let paragraphs = _separate(sentence: preprocessed)
+        var ret: [String] = []
+        for paragraph in paragraphs {
+            var formatted: String = ""
+
+            if _checkIndented(paragraph: paragraph) {
+                formatted = paragraph
+            } else if _checkDialogParagraph(paragraph: paragraph) {
+                formatted = paragraph
+            } else {
+                formatted = _indent(paragraph: paragraph)
+            }
+            ret.append(formatted)
+        }
+        return _combine(paragraphs: ret)
+    }
+
     // MARK: - Utilities
 
     /**
@@ -77,7 +101,7 @@ public class NovelStudioLint {
      - returns: Array of paragraph
      */
     internal static func _separate(sentence: String) -> [String] {
-        let paragraphs = sentence.components(separatedBy: NovelStudioLint.lineFeed)
+        let paragraphs = sentence.components(separatedBy: lineFeed)
         return paragraphs
     }
 
@@ -91,7 +115,7 @@ public class NovelStudioLint {
         for (index, paragraph) in paragraphs.enumerated() {
             sentence += paragraph
             if index != paragraphs.endIndex - 1 {
-                sentence += NovelStudioLint.lineFeed
+                sentence += lineFeed
             }
         }
         return sentence
@@ -108,12 +132,55 @@ public class NovelStudioLint {
         }
         var ret: String = ""
         let lastCharacter = paragraph.suffix(1)
-        if lastCharacter == NovelStudioLint.fullWidthWhiteSpace {
+        if lastCharacter == fullWidthWhiteSpace {
             ret = String(paragraph.prefix(paragraph.count - 1))
         } else {
             ret = paragraph
         }
         return ret
+    }
+
+    /**
+     Check whether the paragraph is dialog or not.
+     - parameter paragraph: Paragraph
+     - returns: true: Dialog / false: Not dialog
+     */
+    internal static func _checkDialogParagraph(paragraph: String) -> Bool {
+        if paragraph.isEmpty {
+            return false
+        }
+        var ret: Bool = false
+        let firstCharacter = paragraph.prefix(1)
+        if firstCharacter == "「" || firstCharacter == "『" || firstCharacter == "（" || firstCharacter == "―" {
+            ret = true
+        }
+        return ret
+    }
+
+    /**
+     Check whether the paragraph is indented or not.
+     - parameter paragraph: Paragraph
+     - returns: true: Indented / false: Not indented
+     */
+    internal static func _checkIndented(paragraph: String) -> Bool {
+        if paragraph.isEmpty {
+            return false
+        }
+        var ret: Bool = false
+        let firstCharacter = paragraph.prefix(1)
+        if firstCharacter == fullWidthWhiteSpace {
+            ret = true
+        }
+        return ret
+    }
+
+    /**
+     Indent the paragraph.
+     - parameter paragraph: Paragraph
+     - returns: Indented paragraph
+     */
+    internal static func _indent(paragraph: String) -> String {
+        return fullWidthWhiteSpace + paragraph
     }
 
 }
