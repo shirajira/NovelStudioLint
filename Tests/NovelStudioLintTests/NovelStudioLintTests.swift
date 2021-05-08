@@ -110,6 +110,14 @@ final class NovelStudioLintTests: XCTestCase {
         XCTAssertEqual(NovelStudioLint._deleteUnnecessarySpace(paragraph: "粉砕　！玉砕　！　大喝采！　　"), "粉砕！玉砕！　大喝采！　")
     }
 
+    func testDeleteSpaceBeforeBracket() {
+        let testcase = "　「小説」"
+        let expected = "「小説」"
+
+        let result = NovelStudioLint._deleteSpaceBeforeBracket(paragraph: testcase)
+        XCTAssertEqual(result, expected)
+    }
+
     // MARK: - API Tests
 
     func testDeleteEndSpaces() {
@@ -133,6 +141,14 @@ final class NovelStudioLintTests: XCTestCase {
         let expected = "古池！　や！\n「蛙飛びこむ！？」\n水？　の音！！"
 
         let result = NovelStudioLint.insertSpaceAfterReservedMarks(sentence: testcase)
+        XCTAssertEqual(result, expected)
+    }
+
+    func testDeleteIndentBeforeBracket() {
+        let testcase = "　古池や\n　「蛙飛びこむ」\n　　「水の音」"
+        let expected = "　古池や\n「蛙飛びこむ」\n「水の音」"
+
+        let result = NovelStudioLint.deleteIndentBeforeBracket(sentence: testcase)
         XCTAssertEqual(result, expected)
     }
 
