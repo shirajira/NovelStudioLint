@@ -20,7 +20,9 @@
 ### **CocoaPods**
 
 ```ruby
-pod 'NovelStudioLint'
+target 'YourProject' do
+  pod 'NovelStudioLint'
+end
 ```
 
 ## **License**
@@ -86,9 +88,9 @@ func NovelStudioLint.deletePunctuationsBeforeClosingBracket(sentence: String) ->
 一般に，閉じ括弧の前の句読点は小説では省略します。
 
 ```
-「そのとおり，時は逃げるものだ。」
+「そのとおり、時は逃げるものだ。」
 　↓
-「そのとおり，時は逃げるものだ」
+「そのとおり、時は逃げるものだ」
 ```
 
 ## **Contact Us**
