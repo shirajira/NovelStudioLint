@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "NovelStudioLint"
-  spec.version      = "1.0.2"
+  spec.version      = "1.0.3"
   spec.summary      = "Lint library for writing novels in Swift."
 
   # This description is used to generate tags and improve search results.
@@ -49,7 +49,7 @@ Pod::Spec.new do |spec|
   #  profile URL.
   #
 
-  spec.author             = "shirajira"
+  spec.author             = { "shirajira" => "contact@novel-stud.io" }
   spec.social_media_url   = "https://twitter.com/shirajira"
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -73,7 +73,7 @@ Pod::Spec.new do |spec|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  spec.source       = { :git => "https://github.com/shirajira/NovelStudioLint.git", :tag => "1.0.2" }
+  spec.source = { :git => "https://github.com/shirajira/NovelStudioLint.git", :tag => "#{spec.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
