@@ -28,6 +28,18 @@ public class NovelStudioLint {
     // MARK: - Main APIs
 
     /**
+     Transform all half-width characters to full-width.
+     - parameter sentence: Sentence
+     - returns: Transformed sentence
+     */
+    public static func transformFullWidthToHalf(sentence: String) -> String {
+        guard let transformed = sentence.applyingTransform(.fullwidthToHalfwidth, reverse: true) else {
+            return sentence
+        }
+        return transformed
+    }
+
+    /**
      Delete spaces located at the end of the sentence.
      - parameter sentence: Sentence
      - returns: Formatted sentence
