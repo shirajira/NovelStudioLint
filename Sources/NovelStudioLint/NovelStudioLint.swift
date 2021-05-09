@@ -166,6 +166,18 @@ public class NovelStudioLint {
         return _combine(paragraphs: ret)
     }
 
+    /**
+     Transform all half-width characters to full-width.
+     - parameter sentence: Sentence
+     - returns: Transformed sentence
+     */
+    public static func transformFullWidthToHalf(sentence: String) -> String {
+        guard let transformed = sentence.applyingTransform(.fullwidthToHalfwidth, reverse: true) else {
+            return sentence
+        }
+        return transformed
+    }
+
     // MARK: - Utilities
 
     /**

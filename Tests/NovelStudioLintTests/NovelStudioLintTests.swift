@@ -175,4 +175,28 @@ final class NovelStudioLintTests: XCTestCase {
         XCTAssertEqual(result, expected)
     }
 
+    func testTransformFullWidthToHalfEmpty() {
+        let testcase = ""
+        let expected = ""
+
+        let result = NovelStudioLint.transformFullWidthToHalf(sentence: testcase)
+        XCTAssertEqual(result, expected)
+    }
+
+    func testTransformFullWidthToHalfWhiteSpace() {
+        let testcase = " "
+        let expected = "　"
+
+        let result = NovelStudioLint.transformFullWidthToHalf(sentence: testcase)
+        XCTAssertEqual(result, expected)
+    }
+
+    func testTransformFullWidthToHalf() {
+        let testcase = "123ＡＢＣ"
+        let expected = "１２３ＡＢＣ"
+
+        let result = NovelStudioLint.transformFullWidthToHalf(sentence: testcase)
+        XCTAssertEqual(result, expected)
+    }
+
 }
