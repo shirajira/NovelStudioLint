@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "NovelStudioLint"
-  spec.version      = "1.1.1"
+  spec.version      = "1.1.2"
   spec.summary      = "Lint library for writing novels in Swift."
 
   # This description is used to generate tags and improve search results.
