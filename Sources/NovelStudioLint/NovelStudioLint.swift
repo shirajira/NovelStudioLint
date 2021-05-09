@@ -28,7 +28,7 @@ public class NovelStudioLint {
     // MARK: - Main APIs
 
     /**
-     Delete spaces located the end of the sentence.
+     Delete spaces located at the end of the sentence.
      - parameter sentence: Sentence
      - returns: Formatted sentence
      */
@@ -101,7 +101,7 @@ public class NovelStudioLint {
                 sourceBuffer = formatted
             }
 
-            // 3) Delete unnecessary spaces located the end of the paragraph.
+            // 3) Delete unnecessary spaces located at the end of the paragraph.
             sourceBuffer = formatted
             while true {
                 formatted = _deleteEndSpace(paragraph: sourceBuffer)
@@ -214,7 +214,7 @@ public class NovelStudioLint {
     }
 
     /**
-     Delete a space located the end of the paragraph.
+     Delete a space located at the end of the paragraph.
      - parameter paragraph: Paragraph
      - returns: Modified paragraph
      */
