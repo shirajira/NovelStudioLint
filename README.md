@@ -25,20 +25,6 @@ target 'YourProject' do
 end
 ```
 
-```ruby
-target 'YourProject' do
-  pod 'NovelStudioLint', :git => 'https://github.com/shirajira/NovelStudioLint.git', :tag => 'X.X.X'
-end
-```
-
-```swift
-import NovelStudioLint
-```
-
-## **License**
-
-`LICENSE` ファイルをご参照ください。
-
 ## **API References**
 
 各 API では，一部の半角記号は全角に置き換えられます。
@@ -108,6 +94,10 @@ func NovelStudioLint.deletePunctuationsBeforeClosingBracket(sentence: String) ->
 ```swift
 func NovelStudioLint.transformFullWidthToHalf(sentence: String) -> String
 ```
+
+## **License**
+
+`LICENSE` ファイルをご参照ください。
 
 ## **Contact Us**
 
