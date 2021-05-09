@@ -39,7 +39,6 @@ Pod::Spec.new do |spec|
 
   spec.license      = { :type => "Apache License, Version 2.0", :file => "LICENSE" }
 
-
   # ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
   #  Specify the authors of the library, with email addresses. Email addresses
@@ -50,9 +49,7 @@ Pod::Spec.new do |spec|
   #  profile URL.
   #
 
-  spec.author             = { "shirajira" => "contact@novel-stud.io" }
-  # Or just: spec.author    = "shirajira"
-  # spec.authors            = { "shirajira" => "contact@novel-stud.io" }
+  spec.author             = "shirajira"
   spec.social_media_url   = "https://twitter.com/shirajira"
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -61,15 +58,14 @@ Pod::Spec.new do |spec|
   #  the deployment target. You can optionally include the target after the platform.
   #
 
-  spec.platform     = :ios, "12.0"
-  # spec.platform     = :ios, "5.0"
+  spec.platform      = :ios, "12.0"
+  spec.swift_version = "5.0"
 
   #  When using multiple platforms
   # spec.ios.deployment_target = "5.0"
   # spec.osx.deployment_target = "10.7"
   # spec.watchos.deployment_target = "2.0"
   # spec.tvos.deployment_target = "9.0"
-  spec.swift_version = "5.0"
 
   # ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -77,7 +73,7 @@ Pod::Spec.new do |spec|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  spec.source       = { :git => "https://github.com/shirajira/NovelStudioLint.git", :tag => "#{spec.version}" }
+  spec.source       = { :git => "https://github.com/shirajira/NovelStudioLint.git", :tag => "{spec.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -89,8 +85,6 @@ Pod::Spec.new do |spec|
   #
 
   spec.source_files  = "Sources/**/*"
-
-  # spec.public_header_files = "Classes/**/*.h"
 
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #

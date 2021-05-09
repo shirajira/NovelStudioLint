@@ -25,6 +25,12 @@ target 'YourProject' do
 end
 ```
 
+```ruby
+target 'YourProject' do
+  pod 'NovelStudioLint', :git => 'https://github.com/shirajira/NovelStudioLint.git', :tag => 'X.X.X'
+end
+```
+
 ## **License**
 
 `LICENSE` ファイルをご参照ください。
