@@ -31,6 +31,10 @@ target 'YourProject' do
 end
 ```
 
+```swift
+import NovelStudioLint
+```
+
 ## **License**
 
 `LICENSE` ファイルをご参照ください。
