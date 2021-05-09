@@ -135,30 +135,6 @@ final class NovelStudioLintTests: XCTestCase {
 
     // MARK: - API Tests
 
-    func testTransformFullWidthToHalfEmpty() {
-        let testcase = ""
-        let expected = ""
-
-        let result = NovelStudioLint.transformFullWidthToHalf(sentence: testcase)
-        XCTAssertEqual(result, expected)
-    }
-
-    func testTransformFullWidthToHalfWhiteSpace() {
-        let testcase = " "
-        let expected = "　"
-
-        let result = NovelStudioLint.transformFullWidthToHalf(sentence: testcase)
-        XCTAssertEqual(result, expected)
-    }
-
-    func testTransformFullWidthToHalf() {
-        let testcase = "123ＡＢＣ"
-        let expected = "１２３ＡＢＣ"
-
-        let result = NovelStudioLint.transformFullWidthToHalf(sentence: testcase)
-        XCTAssertEqual(result, expected)
-    }
-
     func testDeleteEndSpaces() {
         let testcase = "古池や　\n蛙飛びこむ　　\n水の音　　　"
         let expected = "古池や\n蛙飛びこむ\n水の音"
@@ -196,6 +172,30 @@ final class NovelStudioLintTests: XCTestCase {
         let expected = "「古池や」\n「蛙飛びこむ」\n「水の音」"
 
         let result = NovelStudioLint.deletePunctuationsBeforeClosingBracket(sentence: testcase)
+        XCTAssertEqual(result, expected)
+    }
+
+    func testTransformFullWidthToHalfEmpty() {
+        let testcase = ""
+        let expected = ""
+
+        let result = NovelStudioLint.transformFullWidthToHalf(sentence: testcase)
+        XCTAssertEqual(result, expected)
+    }
+
+    func testTransformFullWidthToHalfWhiteSpace() {
+        let testcase = " "
+        let expected = "　"
+
+        let result = NovelStudioLint.transformFullWidthToHalf(sentence: testcase)
+        XCTAssertEqual(result, expected)
+    }
+
+    func testTransformFullWidthToHalf() {
+        let testcase = "123ＡＢＣ"
+        let expected = "１２３ＡＢＣ"
+
+        let result = NovelStudioLint.transformFullWidthToHalf(sentence: testcase)
         XCTAssertEqual(result, expected)
     }
 
