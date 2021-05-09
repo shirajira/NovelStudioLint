@@ -103,6 +103,12 @@ func NovelStudioLint.deletePunctuationsBeforeClosingBracket(sentence: String) ->
 「そのとおり、時は逃げるものだ」
 ```
 
+### **すべての半角文字を全角に変換**
+
+```swift
+func transformFullWidthToHalf(sentence: String) -> String
+```
+
 ## **Contact Us**
 
 @shirajira / contact@novel-stud.io
