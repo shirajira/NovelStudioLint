@@ -22,7 +22,7 @@ public class NovelStudioLint {
 
     // MARK: - Properties
 
-    private static let fullWidthWhiteSpace = "　"  // Full-width white-space
+    private static let fullWidthWhiteSpace: String = "　"  // Full-width white-space
     private static let lineFeed: String = "\n"  // Line-feed
 
     // MARK: - Main APIs
@@ -53,11 +53,12 @@ public class NovelStudioLint {
     }
 
     /**
-     Insert an indent into each paragraph in the sentence.
+     Insert an indent into each paragraph in the sentence, but dialogs will be ignored.
      - parameter sentence: Sentence
+     - parameter considerDashes: Each dashed paragraph is considered as a dialog
      - returns: Indented sentence
      */
-    public static func insertIndent(sentence: String) -> String {
+    public static func insertIndent(sentence: String, considerDashes: Bool) -> String {
         let preprocessed = _preprocess(sentence: sentence)
         let paragraphs = _separate(sentence: preprocessed)
         var ret: [String] = []
@@ -66,7 +67,7 @@ public class NovelStudioLint {
 
             if _checkIndented(paragraph: paragraph) {
                 formatted = paragraph
-            } else if _checkDialogParagraph(paragraph: paragraph) {
+            } else if _checkDialogParagraph(paragraph: paragraph, considerDashes: considerDashes) {
                 formatted = paragraph
             } else {
                 formatted = _indent(paragraph: paragraph)
@@ -119,9 +120,10 @@ public class NovelStudioLint {
     /**
      Delete spaces before a opening bracket.
      - parameter sentence: Sentence
+     - parameter considerDashes: Each dashed paragraph is considered as a dialog
      - returns: Formatted sentence
      */
-    public static func deleteSpacesBeforeOpeningBracket(sentence: String) -> String {
+    public static func deleteSpacesBeforeOpeningBracket(sentence: String, considerDashes: Bool) -> String {
         let preprocessed = _preprocess(sentence: sentence)
         let paragraphs = _separate(sentence: preprocessed)
         var ret: [String] = []
@@ -130,7 +132,7 @@ public class NovelStudioLint {
 
             var sourceBuffer = paragraph
             while true {
-                formatted = _deleteSpaceBeforeOpeningBracket(paragraph: sourceBuffer)
+                formatted = _deleteSpaceBeforeOpeningBracket(paragraph: sourceBuffer, considerDashes: considerDashes)
                 if formatted == sourceBuffer {
                     break
                 }
@@ -247,15 +249,18 @@ public class NovelStudioLint {
     /**
      Check whether the paragraph is dialog or not.
      - parameter paragraph: Paragraph
+     - parameter considerDashes: Each dashed paragraph is considered as a dialog
      - returns: true: Dialog / false: Not dialog
      */
-    internal static func _checkDialogParagraph(paragraph: String) -> Bool {
+    internal static func _checkDialogParagraph(paragraph: String, considerDashes: Bool) -> Bool {
         if paragraph.isEmpty {
             return false
         }
         var ret: Bool = false
         let firstCharacter = paragraph.prefix(1)
-        if firstCharacter == "「" || firstCharacter == "『" || firstCharacter == "（" || firstCharacter == "―" {
+        if firstCharacter == "「" || firstCharacter == "『" || firstCharacter == "（" {
+            ret = true
+        } else if considerDashes, firstCharacter == "―" {
             ret = true
         }
         return ret
@@ -345,14 +350,19 @@ public class NovelStudioLint {
     /**
      Delete an space before an opening bracket.
      - parameter paragraph: Paragraph
+     - parameter considerDashes: Each dashed paragraph is considered as a dialog
      - returns: Modified paragraph
      */
-    internal static func _deleteSpaceBeforeOpeningBracket(paragraph: String) -> String {
-        let replacementRule = [
+    internal static func _deleteSpaceBeforeOpeningBracket(paragraph: String, considerDashes: Bool) -> String {
+        let replacementRule = considerDashes ? [
             "　「": "「",
             "　『": "『",
             "　（": "（",
-            "　―": "―",
+            "　―": "―"
+        ] : [
+            "　「": "「",
+            "　『": "『",
+            "　（": "（"
         ]
         let ret = replacementRule.reduce(paragraph) {
             $0.replacingOccurrences(of: $1.key, with: $1.value)
