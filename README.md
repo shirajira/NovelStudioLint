@@ -92,7 +92,7 @@ func NovelStudioLint.deletePunctuationsBeforeClosingBracket(sentence: String) ->
 ### **すべての半角文字を全角に変換**
 
 ```swift
-func NovelStudioLint.transformFullWidthToHalf(sentence: String) -> String
+func NovelStudioLint.transformHalfWidthToFull(sentence: String) -> String
 ```
 
 ## **License**

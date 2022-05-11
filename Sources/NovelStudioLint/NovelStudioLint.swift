@@ -171,7 +171,7 @@ public class NovelStudioLint {
      - parameter sentence: Sentence
      - returns: Transformed sentence
      */
-    public static func transformFullWidthToHalf(sentence: String) -> String {
+    public static func transformHalfWidthToFull(sentence: String) -> String {
         guard let transformed = sentence.applyingTransform(.fullwidthToHalfwidth, reverse: true) else {
             return sentence
         }
