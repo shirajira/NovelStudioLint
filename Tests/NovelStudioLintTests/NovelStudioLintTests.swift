@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------//
 // NovelStudioLint - NovelStudioLintTests.swift
 //
-// Copyright 2021 shirajira <contact@novel-stud.io>
+// Copyright 2022 shirajira <contact@novel-stud.io>
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -78,13 +78,23 @@ final class NovelStudioLintTests: XCTestCase {
     }
 
     func testCheckDialogParagraph() {
-        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: ""), false)
-        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "　"), false)
-        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "小説"), false)
-        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "「小説」"), true)
-        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "『小説』"), true)
-        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "（小説）"), true)
-        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "――小説"), true)
+        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "", considerDashes: true), false)
+        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "　", considerDashes: true), false)
+        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "小説", considerDashes: true), false)
+        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "「小説」", considerDashes: true), true)
+        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "『小説』", considerDashes: true), true)
+        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "（小説）", considerDashes: true), true)
+        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "――小説", considerDashes: true), true)
+    }
+
+    func testCheckDialogParagraphConsideringDashes() {
+        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "", considerDashes: false), false)
+        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "　", considerDashes: false), false)
+        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "小説", considerDashes: false), false)
+        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "「小説」", considerDashes: false), true)
+        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "『小説』", considerDashes: false), true)
+        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "（小説）", considerDashes: false), true)
+        XCTAssertEqual(NovelStudioLint._checkDialogParagraph(paragraph: "――小説", considerDashes: false), false)
     }
 
     func testCheckIndented() {
@@ -121,7 +131,23 @@ final class NovelStudioLintTests: XCTestCase {
         let testcase = "　「小説」"
         let expected = "「小説」"
 
-        let result = NovelStudioLint._deleteSpaceBeforeOpeningBracket(paragraph: testcase)
+        let result = NovelStudioLint._deleteSpaceBeforeOpeningBracket(paragraph: testcase, considerDashes: true)
+        XCTAssertEqual(result, expected)
+    }
+
+    func testDeleteSpaceBeforeOpeningBracketConsideringDashesTrue() {
+        let testcase = "　――小説"
+        let expected = "――小説"
+
+        let result = NovelStudioLint._deleteSpaceBeforeOpeningBracket(paragraph: testcase, considerDashes: true)
+        XCTAssertEqual(result, expected)
+    }
+
+    func testDeleteSpaceBeforeOpeningBracketConsideringDashesFalse() {
+        let testcase = "　――小説"
+        let expected = "　――小説"
+
+        let result = NovelStudioLint._deleteSpaceBeforeOpeningBracket(paragraph: testcase, considerDashes: false)
         XCTAssertEqual(result, expected)
     }
 
@@ -147,7 +173,23 @@ final class NovelStudioLintTests: XCTestCase {
         let testcase = "古池や\n「蛙飛びこむ」\n　水の音"
         let expected = "　古池や\n「蛙飛びこむ」\n　水の音"
 
-        let result = NovelStudioLint.insertIndent(sentence: testcase)
+        let result = NovelStudioLint.insertIndent(sentence: testcase, considerDashes: true)
+        XCTAssertEqual(result, expected)
+    }
+
+    func testInsertIndentConsideringDashesTrue() {
+        let testcase = "――ここで待て。"
+        let expected = "――ここで待て。"
+
+        let result = NovelStudioLint.insertIndent(sentence: testcase, considerDashes: true)
+        XCTAssertEqual(result, expected)
+    }
+
+    func testInsertIndentConsideringDashesFalse() {
+        let testcase = "――ここで待て。"
+        let expected = "　――ここで待て。"
+
+        let result = NovelStudioLint.insertIndent(sentence: testcase, considerDashes: false)
         XCTAssertEqual(result, expected)
     }
 
@@ -163,7 +205,23 @@ final class NovelStudioLintTests: XCTestCase {
         let testcase = "　古池や\n　「蛙飛びこむ」\n　　「水の音」"
         let expected = "　古池や\n「蛙飛びこむ」\n「水の音」"
 
-        let result = NovelStudioLint.deleteSpacesBeforeOpeningBracket(sentence: testcase)
+        let result = NovelStudioLint.deleteSpacesBeforeOpeningBracket(sentence: testcase, considerDashes: true)
+        XCTAssertEqual(result, expected)
+    }
+
+    func testDeleteSpacesBeforeOpeningBracketConsideringDashesTrue() {
+        let testcase = "　――ここで待て。"
+        let expected = "――ここで待て。"
+
+        let result = NovelStudioLint.deleteSpacesBeforeOpeningBracket(sentence: testcase, considerDashes: true)
+        XCTAssertEqual(result, expected)
+    }
+
+    func testDeleteSpacesBeforeOpeningBracketConsideringDashesFalse() {
+        let testcase = "　――ここで待て。"
+        let expected = "　――ここで待て。"
+
+        let result = NovelStudioLint.deleteSpacesBeforeOpeningBracket(sentence: testcase, considerDashes: false)
         XCTAssertEqual(result, expected)
     }
 
@@ -179,7 +237,7 @@ final class NovelStudioLintTests: XCTestCase {
         let testcase = ""
         let expected = ""
 
-        let result = NovelStudioLint.transformFullWidthToHalf(sentence: testcase)
+        let result = NovelStudioLint.transformHalfWidthToFull(sentence: testcase)
         XCTAssertEqual(result, expected)
     }
 
@@ -187,7 +245,7 @@ final class NovelStudioLintTests: XCTestCase {
         let testcase = " "
         let expected = "　"
 
-        let result = NovelStudioLint.transformFullWidthToHalf(sentence: testcase)
+        let result = NovelStudioLint.transformHalfWidthToFull(sentence: testcase)
         XCTAssertEqual(result, expected)
     }
 
@@ -195,7 +253,7 @@ final class NovelStudioLintTests: XCTestCase {
         let testcase = "123ＡＢＣ"
         let expected = "１２３ＡＢＣ"
 
-        let result = NovelStudioLint.transformFullWidthToHalf(sentence: testcase)
+        let result = NovelStudioLint.transformHalfWidthToFull(sentence: testcase)
         XCTAssertEqual(result, expected)
     }
 
