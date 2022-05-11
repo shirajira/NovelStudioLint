@@ -42,10 +42,11 @@ func NovelStudioLint.deleteEndSpaces(sentence: String) -> String
 ### **各段落にインデントを挿入**
 
 ```swift
-func NovelStudioLint.insertIndent(sentence: String) -> String
+func NovelStudioLint.insertIndent(sentence: String, considerDashes: Bool) -> String
 ```
 
-すでにインデントされている段落や，括弧などで始まる段落はインデントされません。
+すでにインデントされている段落や，括弧などで始まる段落はインデントされません。  
+ダッシュを括弧と同様に扱う場合，`considerDashes` を `true` に指定してください。
 
 ### **感嘆符（！）や疑問符（？）の後ろにスペースを挿入**
 
@@ -64,10 +65,11 @@ func NovelStudioLint.insertSpaceAfterReservedMarks(sentence: String) -> String
 ### **開き括弧の前のスペースを削除**
 
 ```swift
-func NovelStudioLint.deleteSpacesBeforeOpeningBracket(sentence: String) -> String
+func NovelStudioLint.deleteSpacesBeforeOpeningBracket(sentence: String, considerDashes: Bool) -> String
 ```
 
-一般に，括弧で始まる段落は小説ではインデントしません。
+一般に，括弧で始まる段落は小説ではインデントしません。  
+ダッシュを括弧と同様に扱う場合，`considerDashes` を `true` に指定してください。
 
 ```
 　「君たちを待っていたよ」
