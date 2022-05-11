@@ -103,4 +103,4 @@ func NovelStudioLint.transformFullWidthToHalf(sentence: String) -> String
 
 @shirajira / contact@novel-stud.io
 
-(C) 2021 [Novel Studio](https://novel-stud.io/)
+(C) 2022 [Novel Studio](https://novel-stud.io/)

@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------//
 // NovelStudioLint - NovelStudioLintTests.swift
 //
-// Copyright 2021 shirajira <contact@novel-stud.io>
+// Copyright 2022 shirajira <contact@novel-stud.io>
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
